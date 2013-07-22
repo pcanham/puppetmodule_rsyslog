@@ -20,12 +20,12 @@ $IncludeConfig <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/*.conf
 ###############################################################################
 ### Starting remote syslog config                                           ###
 ###############################################################################
-<% if scope.lookupvar('rsyslog::server::setup::udp_enable') == true %>
+<% if scope.lookupvar('rsyslog::udp_enable') == true %>
 # Provides UDP syslog reception
 # for parameters see http://www.rsyslog.com/doc/imudp.html
 module(load="imudp") # needs to be done just once
 <% end %>
-<% if scope.lookupvar('rsyslog::server::setup::tcp_enable') == true %>
+<% if scope.lookupvar('rsyslog::tcp_enable') == true %>
 # Provides TCP syslog reception
 # for parameters see http://www.rsyslog.com/doc/imtcp.html
 module(load="imtcp") # needs to be done just once
@@ -35,12 +35,12 @@ module(load="imtcp") # needs to be done just once
 $RuleSet remote
 
 $template FileFormat,"%msg:::sp-if-no-1st-sp%%msg%\n"
-$template noLogServerLog, "<%= scope.lookupvar('rsyslog::server::setup::logpath') %>/%HOSTNAME%/%programname%.log"
+$template noLogServerLog, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%programname%.log"
 if $syslogfacility-text == 'local3' then ?noLogServerLog;FileFormat
 & ~
 
-$template DynFile, "<%= scope.lookupvar('rsyslog::server::setup::logpath') %>/%HOSTNAME%/%syslogfacility-text%.log"
-$Template DynMessages, "<%= scope.lookupvar('rsyslog::server::setup::logpath') %>/%HOSTNAME%/messages"
+$template DynFile, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%syslogfacility-text%.log"
+$Template DynMessages, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/messages"
 *.info;mail.none;authpriv.none;cron.none            ?DynFile;FileFormat
 authpriv.*                                          ?DynFile;FileFormat
 mail.*                                              ?DynFile;FileFormat
@@ -51,12 +51,12 @@ uucp,news.crit                                      ?DynFile;FileFormat
 # Switch back to default ruleset
 $RuleSet RSYSLOG_DefaultRuleset
 
-<% if scope.lookupvar('rsyslog::server::setup::tcp_enable') == true %>
+<% if scope.lookupvar('rsyslog::tcp_enable') == true %>
 # bind ruleset to tcp listener
 input(type="imtcp" port="<% scope.lookupvar('rsyslog::tcp_port') %>" Ruleset="remote")
 <% end %>
-<% if scope.lookupvar('rsyslog::server::setup::udp_enable') == true %>
-input(type="imtcp" port="<%= scope.lookupvar('rsyslog::server::setup::udp_port' %> Ruleset="remote")
+<% if scope.lookupvar('rsyslog::udp_enable') == true %>
+input(type="imtcp" port="<%= scope.lookupvar('rsyslog::udp_port' %> Ruleset="remote")
 <% end %>
 ###############################################################################
 ### Finishing remote syslog config                                          ###

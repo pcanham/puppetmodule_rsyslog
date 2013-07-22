@@ -31,19 +31,23 @@
 #
 class rsyslog(
   $rsyslogmjrver = $rsyslog::params::rsyslogmjrver, 
-  $enabled      = $rsyslog::params::enabled,
-  $server       = false,
-  $client       = $server ? {
-    true    => false,
-    false   => true,
-    default => true
-    },
+  $enabled       = $rsyslog::params::enabled,
+  $server        = false,
+  $client        = $server ? {
+                      true    => false,
+                      false   => true,
+                      default => true
+                    },
   $extsyslog_dir = $rsyslog::params::extsyslog_dir,
-  $syslogserver = undef,
-  $tcp_enable   = $rsyslog::params::tcp_enabled,
-  $udp_enable   = $rsyslog::params::udp_enabled,
-  $tcp_port     = $rsyslog::params::tcp_port,
-  $udp_port     = $rsyslog::params::udp_port
+  $packagename   = $rsyslog::params::packagename,
+  $svc_name      = $rsyslog::params::svc_name,
+  $syslog_config = $rsyslog::params::syslog_config,
+  $syslogserver  = undef,
+  $logpath       = $rsyslog::params::logpath,
+  $tcp_enable    = $rsyslog::params::tcp_enabled,
+  $udp_enable    = $rsyslog::params::udp_enabled,
+  $tcp_port      = $rsyslog::params::tcp_port,
+  $udp_port      = $rsyslog::params::udp_port
 ) {
   require rsyslog::params
   if $enabled == false {
@@ -56,7 +60,7 @@ class rsyslog(
       }
     } else {
       if $syslogserver == undef {
-        warning('No syslog server defined, will setup stand alone config')
+        warning('No syslog server defined, will setup standalone config')
       } else {
         class { 'rsyslog::client::setup':
           syslogserver => $syslogserver,

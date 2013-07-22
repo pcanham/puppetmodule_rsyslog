@@ -14,7 +14,7 @@
 #
 class rsyslog::service {
   require rsyslog::params
-  service { $rsyslog::params::svc_name:
+  service { "${rsyslog::svc_name}":
     ensure  => running,
     enable  => true,
     require => Class['rsyslog::install']

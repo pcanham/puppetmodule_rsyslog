@@ -22,12 +22,12 @@
 #   udp_enable   => false
 # }
 class rsyslog::client::setup(
-  $rsyslogmjrver     = "${rsyslog::rsyslogmjrver}",
-  $syslogserver = undef,
-  $tcp_enable   = $rsyslog::params::tcp_enabled,
-  $tcp_port     = $rsyslog::params::tcp_port,
-  $udp_enable   = $rsyslog::params::udp_enabled,
-  $udp_port     = $rsyslog::params::udp_port
+  $rsyslogmjrver = "${rsyslog::rsyslogmjrver}",
+  $syslogserver  = undef,
+  $tcp_enable    = $rsyslog::tcp_enabled,
+  $tcp_port      = $rsyslog::tcp_port,
+  $udp_enable    = $rsyslog::udp_enabled,
+  $udp_port      = $rsyslog::udp_port
 ) {
   require rsyslog::params
 
@@ -37,7 +37,7 @@ class rsyslog::client::setup(
     class {'rsyslog::yumrepo':
               before => [ Class['rsyslog::install'], 
                           Class['rsyslog::service'],
-                          File["${rsyslog::params::syslog_config}"],
+                          File["${rsyslog::syslog_config}"],
                ],
     }
   }

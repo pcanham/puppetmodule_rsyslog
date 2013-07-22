@@ -36,7 +36,7 @@ define rsyslog::client::imfile(
   if $filetag == undef { fail('filetag not set.') }
   if $statefile == undef { fail('statefile not set.') }
 
-  $extsyslog_dir = $rsyslog::params::extsyslog_dir
+  $extsyslog_dir = $rsyslog::extsyslog_dir
   file { "${extsyslog_dir}/${filetag}":
     ensure  => file,
     path    => "${extsyslog_dir}/${filetag}.conf",

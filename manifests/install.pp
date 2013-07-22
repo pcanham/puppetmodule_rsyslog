@@ -13,11 +13,11 @@
 #
 class rsyslog::install {
   require rsyslog::params
-  package { $rsyslog::params::packagename:
+  package { "$rsyslog::packagename":
     ensure => latest,
   }
 
-  $extsyslog_dir = $rsyslog::params::extsyslog_dir
+  $extsyslog_dir = $rsyslog::extsyslog_dir
   file { $extsyslog_dir:
     ensure  => directory,
     owner   => 'root',
