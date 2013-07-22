@@ -12,7 +12,6 @@
 # class { 'rsyslog::install': }
 #
 class rsyslog::install {
-  require rsyslog::params
   package { "$rsyslog::packagename":
     ensure => latest,
   }

@@ -48,8 +48,7 @@ class rsyslog(
   $udp_enable    = $rsyslog::params::udp_enabled,
   $tcp_port      = $rsyslog::params::tcp_port,
   $udp_port      = $rsyslog::params::udp_port
-) {
-  require rsyslog::params
+) inherits rsyslog::params {
   if $enabled == false {
     notify {'client or server parameter needs to be declared.':}
   } else {

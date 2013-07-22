@@ -1,7 +1,8 @@
 module(load="imfile" PollingInterval="10") #needs to be done just once
 
-input(type="imfile" File="<%= @logfilename %>" 
-      Tag="<%= @filetag %>" 
-      StateFile="<%= @statefile %>" 
-      Severity="<%= @severity %>" 
-      Facility="<%= @factility %>")
+input(type="imfile" File="<%= scope.lookupvar('rsyslog::client::imfile::logfilename') %>" 
+      Tag="<%= scope.lookupvar('rsyslog::client::imfile::filetag') %>" 
+      StateFile="<%= scope.lookupvar('rsyslog::client::imfile::statefile') %>" 
+      Severity="<%= scope.lookupvar('rsyslog::client::imfile::serverity') %>" 
+      Facility="<%= scope.lookupvar('rsyslog::client::imfile::factility') %>")
+      

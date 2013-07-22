@@ -22,38 +22,33 @@
 #      udp_enable  => false
 #    }
 class rsyslog::server::setup(
-  $rsyslogmjrver  = ${rsyslog::rsyslogmjrver},
+  $rsyslogmjrver  = $rsyslog::rsyslogmjrver,
   $tcp_enable     = $rsyslog::tcp_enabled,
   $tcp_port       = $rsyslog::tcp_port,
   $udp_enable     = $rsyslog::udp_enabled,
   $udp_port       = $rsyslog::udp_port,
   $logpath        = $rsyslog::logpath
 ) {
-  require rsyslog::params
 
   if defined(Class['rsyslog::yumrepo']) {
     notice("Class: rsyslog::yumrepo already defined.")
   } else {
     class {'rsyslog::yumrepo':
               before => [ Class['rsyslog::install'], 
-                          Class['rsyslog::service'],
-                          File["${rsyslog::syslog_config}"],
                ],
     }
   }
 
-  class { 'rsyslog::install': }
-  class { 'rsyslog::service': }
-  
-  file { "${rsyslog::syslog_config}":
-    ensure   => file,
-    backup   => true,
-    owner    => 'root',
-    group    => 'root',
-    mode     => '0750',
-    checksum => md5,
-    content  => template("rsyslog/${rsyslogmjrver}-rsyslog.conf.erb"),
-    require  => Class['rsyslog::install'],
-    notify   => Class['rsyslog::service']
-  }
+  class { 'rsyslog::install': }->
+    class { 'rsyslog::service': }->
+      file { "${rsyslog::syslog_config}":
+        ensure   => file,
+        backup   => true,
+        owner    => 'root',
+        group    => 'root',
+        mode     => '0750',
+        checksum => md5,
+        content  => template("rsyslog/${rsyslogmjrver}-rsyslog.conf.erb"),
+        notify   => Class['rsyslog::service']
+      }
 }

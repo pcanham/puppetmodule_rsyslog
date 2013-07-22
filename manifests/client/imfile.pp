@@ -30,7 +30,6 @@ define rsyslog::client::imfile(
   $severity          = 'debug',
   $factility         = 'local3',
 ) {
-  require rsyslog::params
 
   if $logfilename == undef { fail('logfilename not set.') }
   if $filetag == undef { fail('filetag not set.') }

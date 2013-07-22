@@ -31,7 +31,7 @@ Vagrant.configure("2") do |config|
     webnode.vm.provision :puppet,
       :options => ["--verbose", "--debug", "--summarize"],
       :facter => {
-        "fqdn"   => "webnode",
+        "fqdn"   => "rsyslog",
       } do |puppet|
         puppet.manifests_path = "./"
         puppet.manifest_file = "vagrant.pp"
