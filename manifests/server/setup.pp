@@ -29,6 +29,18 @@ class rsyslog::server::setup(
   $logpath     = $rsyslog::params::logpath
 ) {
   require rsyslog::params
+
+  if defined(Class['rsyslog::yumrepo']) {
+    notice("Class: rsyslog::yumrepo already defined.")
+  } else {
+    class {'rsyslog::yumrepo':
+              before => [ Class['rsyslog::install'], 
+                          Class['rsyslog::service'],
+                          File["${rsyslog::params::syslog_config}"],
+               ],
+    }
+  }
+    
   class { 'rsyslog::install': }
   class { 'rsyslog::service': }
   
