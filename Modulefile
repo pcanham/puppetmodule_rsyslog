@@ -1,0 +1,8 @@
+name    'puppetmodule-rsyslog'
+version '0.0.1'
+source  'http://git-infra.internal/puppet/puppetmodule_rsyslog.git'
+author  'pcanham'
+license ''
+summary 'Package for installing rsyslog as a server or client'
+description     'basic rsyslog module for deploying to Redhat dervivative'
+project_page    'http://git-infra.internal/puppet/puppetmodule_rsyslog.git'
