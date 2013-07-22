@@ -14,7 +14,7 @@
 class rsyslog::install {
   require rsyslog::params
   package { $rsyslog::params::packagename:
-    ensure => present,
+    ensure => latest,
   }
 
   $extsyslog_dir = $rsyslog::params::extsyslog_dir

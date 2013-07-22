@@ -29,6 +29,15 @@ class rsyslog::client::setup(
   $udp_port     = $rsyslog::params::udp_port
 ) {
   require rsyslog::params
+  
+  if defined(Class['rsyslog::yumrepo']) {
+    notice("Class: rsyslog::yumrepo already defined.")
+  } else {
+    class {'rsyslog::yumrepo':
+              before => [ Class['rsyslog::install'], Class['rsyslog::service'] ],
+    }
+  }
+
   class { 'rsyslog::install': }
   class { 'rsyslog::service': }
 
