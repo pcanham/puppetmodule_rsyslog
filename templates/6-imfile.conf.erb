@@ -1,9 +1,9 @@
 $ModLoad imfile
-$InputFileName <%= scope.lookupvar('rsyslog::client::imfile::logfilename') %>
-$InputFileTag <%= scope.lookupvar('rsyslog::client::imfile::filetag') %>
-$InputFileStateFile <%= scope.lookupvar('rsyslog::client::imfile::statefile') %>
-$InputFileSeverity <%= scope.lookupvar('rsyslog::client::imfile::serverity') %>
-$InputFileFacility <%= scope.lookupvar('rsyslog::client::imfile::factility') %>
+$InputFileName <%= scope.lookupvar('logfilename') %>
+$InputFileTag <%= scope.lookupvar('filetag') %>
+$InputFileStateFile <%= scope.lookupvar('statefile') %>
+$InputFileSeverity <%= scope.lookupvar('severity') %>
+$InputFileFacility <%= scope.lookupvar('factility') %>
 $InputRunFileMonitor
 
 ## check for new lines every 10 seconds
