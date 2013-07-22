@@ -14,7 +14,7 @@
 #
 class rsyslog::yumrepo {
   yumrepo { 'rsyslog-v5-stable':
-    baseurl => "http://rpms.adiscon.com/v5-stable/epel-${::os_maj_version}/${::architecture}",
+    baseurl => "http://rpms.adiscon.com/v5-stable/epel-6/${::architecture}",
     descr => "Adiscon Rsyslog v5-stable for CentOS-${::os_maj_version}-${::architecture}",
     gpgkey => 'http://rpms.adiscon.com/RPM-GPG-KEY-Adiscon',
     enabled => '0',
@@ -22,7 +22,7 @@ class rsyslog::yumrepo {
   }
 
   yumrepo { 'rsyslog-v6-stable':
-    baseurl => "http://rpms.adiscon.com/v6-stable/epel-${::os_maj_version}/${::architecture}",
+    baseurl => "http://rpms.adiscon.com/v6-stable/epel-6/${::architecture}",
     descr => "Adiscon Rsyslog v6-stable for CentOS-${::os_maj_version}-${::architecture}",
     gpgkey => 'http://rpms.adiscon.com/RPM-GPG-KEY-Adiscon',
     enabled => '1',
@@ -30,7 +30,7 @@ class rsyslog::yumrepo {
   }
 
   yumrepo { 'rsyslog-v7-stable':
-    baseurl => "http://rpms.adiscon.com/v7-stable/epel-${::os_maj_version}/${::architecture}",
+    baseurl => "http://rpms.adiscon.com/v7-stable/epel-6/${::architecture}",
     descr => "Adiscon Rsyslog v7-stable for CentOS-${::os_maj_version}-${::architecture}",
     gpgkey => 'http://rpms.adiscon.com/RPM-GPG-KEY-Adiscon',
     enabled => '0',
