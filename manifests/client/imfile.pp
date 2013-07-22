@@ -23,6 +23,7 @@
 #  }
 #
 define rsyslog::client::imfile(
+  $rsyslogmjrver     = "${rsyslog::rsyslogmjrver}",
   $logfilename       = undef,
   $filetag           = undef,
   $statefile         = undef,
@@ -40,7 +41,7 @@ define rsyslog::client::imfile(
     ensure  => file,
     path    => "${extsyslog_dir}/${filetag}.conf",
     backup  => false,
-    content => template('rsyslog/imfile.conf.erb'),
+    content => template("rsyslog/${rsyslogmjrver}-imfile.conf.erb"),
     require => Class['rsyslog::install'],
     notify  => Class['rsyslog::service'],
   }

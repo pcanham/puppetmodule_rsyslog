@@ -15,14 +15,15 @@
 # require rsyslog::params
 #
 class rsyslog::params {
-  $syslogserver = undef
-  $tcp_port     = '514'
-  $udp_port     = '514'
-  $enabled      = true
-  $storeconfigs = $settings::storeconfigs
-  $tcp_enabled  = false
-  $udp_enabled  = false
-  $logpath      = '/var/log/syslog'
+  $syslogserver  = undef
+  $tcp_port      = '514'
+  $udp_port      = '514'
+  $enabled       = true
+  $storeconfigs  = $settings::storeconfigs
+  $tcp_enabled   = false
+  $udp_enabled   = false
+  $logpath       = '/var/log/syslog'
+  $rsyslogmjrver = '6'
 
   case $::osfamily {
     RedHat: {

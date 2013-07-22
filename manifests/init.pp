@@ -30,6 +30,7 @@
 #  }
 #
 class rsyslog(
+  $rsyslogmjrver = $rsyslog::params::rsyslogmjrver, 
   $enabled      = $rsyslog::params::enabled,
   $server       = false,
   $client       = $server ? {

@@ -22,6 +22,7 @@
 #   udp_enable   => false
 # }
 class rsyslog::client::setup(
+  $rsyslogmjrver     = "${rsyslog::rsyslogmjrver}",
   $syslogserver = undef,
   $tcp_enable   = $rsyslog::params::tcp_enabled,
   $tcp_port     = $rsyslog::params::tcp_port,
@@ -51,7 +52,7 @@ class rsyslog::client::setup(
     group    => 'root',
     mode     => '0750',
     checksum => md5,
-    content  => template('rsyslog/rsyslog.conf.erb'),
+    content  => template("rsyslog/${rsyslogmjrver}-rsyslog.conf.erb"),
     require  => Class['rsyslog::install'],
     notify   => Class['rsyslog::service']
   }
