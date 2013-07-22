@@ -9,18 +9,18 @@ $ModLoad immark   # provides --MARK-- message capability
 $ModLoad imuxsock # provides support for local system logging (e.g. via logger command)
 $ModLoad imklog   # kernel logging (formerly provided by rklogd)
 
-# Include all config files in <%= scope.lookupvar('extsyslog_dir') %>/
-$IncludeConfig <%= scope.lookupvar('extsyslog_dir') %>/*.conf
+# Include all config files in <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/
+$IncludeConfig <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/*.conf
 
-<% if scope.lookupvar('server') == true %>
+<% if scope.lookupvar('rsyslog::server') == true %>
 ###############################################################################
 ### Starting remote syslog config                                           ###
 ###############################################################################
-<% if scope.lookupvar('udp_enable') == true %>
+<% if scope.lookupvar('rsyslog::udp_enable') == true %>
 ## provides UDP syslog reception
 $ModLoad imudp
 <% end %>
-<% if scope.lookupvar('tcp_enable') == true %>
+<% if scope.lookupvar('rsyslog::tcp_enable') == true %>
 ## provides TCP syslog reception
 $ModLoad imtcp
 <% end %>
@@ -28,12 +28,12 @@ $ModLoad imtcp
 $RuleSet remote
 
 $template FileFormat,"%msg:::sp-if-no-1st-sp%%msg%\n"
-$template noLogServerLog, "<%= scope.lookupvar('logpath') %>/%HOSTNAME%/%programname%.log"
+$template noLogServerLog, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%programname%.log"
 if $syslogfacility-text == 'local3' then ?noLogServerLog;FileFormat
 & ~
 
-$template DynFile, "<%= scope.lookupvar('logpath') %>/%HOSTNAME%/%syslogfacility-text%.log"
-$Template DynMessages, "<%= scope.lookupvar('logpath') %>/%HOSTNAME%/messages"
+$template DynFile, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%syslogfacility-text%.log"
+$Template DynMessages, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/messages"
 *.info;mail.none;authpriv.none;cron.none            ?DynFile;FileFormat
 authpriv.*                                          ?DynFile;FileFormat
 mail.*                                              ?DynFile;FileFormat
@@ -44,14 +44,14 @@ uucp,news.crit                                      ?DynFile;FileFormat
 # Switch back to default ruleset
 $RuleSet RSYSLOG_DefaultRuleset
 
-<% if scope.lookupvar('tcp_enable') == true %>
+<% if scope.lookupvar('rsyslog::tcp_enable') == true %>
 # bind ruleset to tcp listener
 $InputTCPServerBindRuleset remote
-$InputTCPServerRun <%= scope.lookupvar('tcp_port') %>
+$InputTCPServerRun <%= scope.lookupvar('rsyslog::tcp_port') %>
 <% end %>
-<% if scope.lookupvar('udp_enable') == true %>
+<% if scope.lookupvar('rsyslog::udp_enable') == true %>
 $InputUDPServerBindRuleset remote
-$UDPServerRun <%= scope.lookupvar('udp_port') %>
+$UDPServerRun <%= scope.lookupvar('rsyslog::udp_port') %>
 <% end %>
 ###############################################################################
 ### Finishing remote syslog config                                          ###
@@ -77,11 +77,11 @@ cron.*                                                  -/var/log/cron
 uucp,news.crit                                          -/var/log/spooler
 # Save boot messages also to boot.log
 local7.*                                                /var/log/boot.log
-<% if scope.lookupvar('client') == true %>
-<% if scope.lookupvar('udp_enable') == true %>
-*.* @<%= scope.lookupvar('syslogserver') %>:<%= scope.lookupvar('udp_port') %>
+<% if scope.lookupvar('rsyslog::client') == true %>
+<% if scope.lookupvar('rsyslog::udp_enable') == true %>
+*.* @<%= scope.lookupvar('rsyslog::syslogserver') %>:<%= scope.lookupvar('rsyslog::udp_port') %>
 <% end %>
 <% if scope.lookupvar('tcp_enable') == true %>
-*.* @@<%= scope.lookupvar('syslogserver') %>:<%= scope.lookupvar('tcp_port') %>
+*.* @@<%= scope.lookupvar('rsyslog::syslogserver') %>:<%= scope.lookupvar('rsyslog::tcp_port') %>
 <% end %>
 <% end %>
