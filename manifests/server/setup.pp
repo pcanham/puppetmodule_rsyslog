@@ -48,7 +48,7 @@ class rsyslog::server::setup(
         group    => 'root',
         mode     => '0750',
         checksum => md5,
-        content  => template("rsyslog/${rsyslogmjrver}-rsyslog.conf.erb"),
+        content  => template("rsyslog/${rsyslog::rsyslogmjrver}-rsyslog.conf.erb"),
         notify   => Class['rsyslog::service']
       }
 }

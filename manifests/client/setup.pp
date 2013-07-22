@@ -41,13 +41,13 @@ class rsyslog::client::setup(
 
   class { 'rsyslog::install': }->
     class { 'rsyslog::service': }->
-      file { "${rsyslog::params::syslog_config}":
+      file { "${rsyslog::syslog_config}":
         ensure   => file,
         backup   => true,
         owner    => 'root',
         group    => 'root',
         mode     => '0750',
         checksum => md5,
-        content  => template("rsyslog/${rsyslogmjrver}-rsyslog.conf.erb"),
+        content  => template("rsyslog/${rsyslog::rsyslogmjrver}-rsyslog.conf.erb"),
       }
 }
