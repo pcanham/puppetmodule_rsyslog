@@ -8,6 +8,9 @@
 $ModLoad immark   # provides --MARK-- message capability
 $ModLoad imuxsock # provides support for local system logging (e.g. via logger command)
 $ModLoad imklog   # kernel logging (formerly provided by rklogd)
+<% if scope.lookupvar('rsyslog::client::imfileimfilemodule') == true %>
+$ModLoad imfile
+<% end %>
 
 # Include all config files in <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/
 $IncludeConfig <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/*.conf
