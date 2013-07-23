@@ -34,11 +34,17 @@ define rsyslog::client::imfile(
   if $logfilename == undef { fail('logfilename not set.') }
   if $filetag == undef { fail('filetag not set.') }
   if $statefile == undef { fail('statefile not set.') }
+  
+  file { "${rsyslog::extsyslog_dir}/imfile.conf":
+      content => '$ModLoad imfile',
+      backup  => false,
+      notify  => Class['rsyslog::service'],
+    }
 
-  $extsyslog_dir = $rsyslog::extsyslog_dir
-  file { "${extsyslog_dir}/${filetag}":
+
+  file { "${rsyslog::extsyslog_dir}/${filetag}":
     ensure  => file,
-    path    => "${extsyslog_dir}/${filetag}.conf",
+    path    => "${rsyslog::extsyslog_dir}/${filetag}.conf",
     backup  => false,
     content => template("rsyslog/${rsyslogmjrver}-imfile.conf.erb"),
     require => Class['rsyslog::install'],
