@@ -36,4 +36,10 @@ class rsyslog::yumrepo {
     enabled => '0',
     gpgcheck => '0',
   }
+
+  exec { "yum-clean-all": 
+    path => '/bin:/usr/bin:/usr/sbin:/usr/local/bin',
+    subscribe => [ Yumrepo['rsyslog-v5-stable'], Yumrepo['rsyslog-v6-stable'], Yumrepo['rsyslog-v7-stable'] ], 
+    command => "yum clean all" 
+  }
 }
