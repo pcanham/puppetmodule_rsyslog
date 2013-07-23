@@ -35,19 +35,11 @@ define rsyslog::client::imfile(
   if $filetag == undef { fail('filetag not set.') }
   if $statefile == undef { fail('statefile not set.') }
   
-  
-
-  $imfilecontent = $rsyslogmjrver ? {
-                      6       => '$ModLoad imfile',
-                      7       => 'module(load="imfile" PollingInterval="10")',
-                      default => '$ModLoad imfile'
-                    },
-
   if defined(File["${rsyslog::extsyslog_dir}/imfile.conf"]) {
       notice("File: ${rsyslog::extsyslog_dir}/imfile.conf already defined.")
     } else {
       file { "${rsyslog::extsyslog_dir}/imfile.conf":
-       content => $imfilecontent,
+       content => template("rsyslog/${rsyslogmjrver}-imfile-master.conf.erb"),
        backup  => false,
        notify  => Class['rsyslog::service'],
       }    
