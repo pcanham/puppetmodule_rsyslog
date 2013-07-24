@@ -22,7 +22,7 @@ class rsyslog::install {
 
   package { $rsyslog::packagename:
     ensure  => latest,
-    require => Exec['rsyslog-yum-clean-all'],
+    require => Exec['rsyslog-yum-clean-all'] 
   }
 
   file { $rsyslog::extsyslog_dir:
