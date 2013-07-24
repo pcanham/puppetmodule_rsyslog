@@ -32,7 +32,7 @@ class rsyslog::client {
  
    concat::fragment{"imfile_header":
       target => $imfile,
-      content => "template("rsyslog/${rsyslog::rsyslogmjrver}-imfile-master.conf.erb")",
+      content => template("rsyslog/${rsyslog::rsyslogmjrver}-imfile-master.conf.erb"),
       order   => 01,
    }
 }
@@ -51,7 +51,7 @@ define rsyslog::client::concatimfile(
 
   concat::fragment { "jboss config ${title}":
     target  => "${rsyslog::extsyslog_dir}/imfile.conf",
-    content => template('rsyslog/${rsyslog::rsyslogmjrver}-imfile.conf.erb'),
+    content => template("rsyslog/${rsyslog::rsyslogmjrver}-imfile.conf.erb"),
   }
 
 }
