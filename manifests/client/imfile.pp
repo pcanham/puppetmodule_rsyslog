@@ -1,4 +1,4 @@
-# Define: rsyslog::client::concatimfile
+# Define: rsyslog::client::imfile
 #
 # This module manages custom files being pushed through rsyslog via
 # imfile module.
