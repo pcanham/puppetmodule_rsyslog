@@ -17,7 +17,7 @@ class rsyslog::install {
     path     => '/bin:/usr/bin:/usr/sbin:/usr/local/bin',
     require  => [ Yumrepo['rsyslog-v5-stable'], Yumrepo['rsyslog-v6-stable'], Yumrepo['rsyslog-v7-stable'] ], 
     command  => "yum clean all",
-    notify   => Package["$rsyslog::packagename"],
+    before   => Package["$rsyslog::packagename"],
   }
 
   package { $rsyslog::packagename:
