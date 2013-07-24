@@ -56,7 +56,7 @@ $RuleSet RSYSLOG_DefaultRuleset
 input(type="imtcp" port="<% scope.lookupvar('rsyslog::tcp_port') %>" Ruleset="remote")
 <% end %>
 <% if scope.lookupvar('rsyslog::udp_enable') == true %>
-input(type="imtcp" port="<%= scope.lookupvar('rsyslog::udp_port' %> Ruleset="remote")
+input(type="imtcp" port="<%= scope.lookupvar('rsyslog::udp_port' %>" Ruleset="remote")
 <% end %>
 ###############################################################################
 ### Finishing remote syslog config                                          ###
