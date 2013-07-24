@@ -48,6 +48,6 @@ class rsyslog::server::setup(
         mode     => '0750',
         checksum => md5,
         content  => template("rsyslog/${rsyslog::rsyslogmjrver}-rsyslog.conf.erb"),
-      }->
+      }~>
         class { 'rsyslog::service': }
 }
