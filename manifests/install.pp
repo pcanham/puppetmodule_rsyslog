@@ -20,13 +20,12 @@ class rsyslog::install {
     before    => Package["$rsyslog::packagename"],
   }
 
-  package { "$rsyslog::packagename":
+  package { $rsyslog::packagename:
     ensure  => latest,
     require => Exec['rsyslog-yum-clean-all'],
   }
 
-  $extsyslog_dir = $rsyslog::extsyslog_dir
-  file { $extsyslog_dir:
+  file { $rsyslog::extsyslog_dir:
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
