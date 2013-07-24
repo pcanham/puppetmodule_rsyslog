@@ -21,17 +21,16 @@ class rsyslog::install {
                 ], 
     command  => "yum clean all",
     before   => Package["$rsyslog::packagename"],
-  }
-
-  package { $rsyslog::packagename:
-    ensure  => latest,
-    require => [ Exec['rsyslog-yum-clean-all'],
-                  Yumrepo['rsyslog-v5-stable'],
-                  Yumrepo['rsyslog-v6-stable'],
-                  Yumrepo['rsyslog-v7-stable']
-                ],
-    notify  => Class[rsyslog::service],
-  }
+  }~>
+    package { $rsyslog::packagename:
+      ensure  => latest,
+      require => [ Exec['rsyslog-yum-clean-all'],
+                    Yumrepo['rsyslog-v5-stable'],
+                    Yumrepo['rsyslog-v6-stable'],
+                    Yumrepo['rsyslog-v7-stable']
+                 ],
+      notify  => Class[rsyslog::service],
+    }
 
   file { $rsyslog::extsyslog_dir:
     ensure  => directory,
