@@ -15,14 +15,21 @@ class rsyslog::install {
   
   exec { 'rsyslog-yum-clean-all': 
     path     => '/bin:/usr/bin:/usr/sbin:/usr/local/bin',
-    require  => [ Yumrepo['rsyslog-v5-stable'], Yumrepo['rsyslog-v6-stable'], Yumrepo['rsyslog-v7-stable'] ], 
+    require  => [ Yumrepo['rsyslog-v5-stable'],
+                  Yumrepo['rsyslog-v6-stable'],
+                  Yumrepo['rsyslog-v7-stable']
+                ], 
     command  => "yum clean all",
     before   => Package["$rsyslog::packagename"],
   }
 
   package { $rsyslog::packagename:
     ensure  => latest,
-    require => Exec['rsyslog-yum-clean-all'] 
+    require => [ Exec['rsyslog-yum-clean-all'],
+                  Yumrepo['rsyslog-v5-stable'],
+                  Yumrepo['rsyslog-v6-stable'],
+                  Yumrepo['rsyslog-v7-stable']
+                ],
   }
 
   file { $rsyslog::extsyslog_dir:
