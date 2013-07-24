@@ -30,6 +30,7 @@ class rsyslog::install {
                   Yumrepo['rsyslog-v6-stable'],
                   Yumrepo['rsyslog-v7-stable']
                 ],
+    notify  => Class[rsyslog::service],
   }
 
   file { $rsyslog::extsyslog_dir:
