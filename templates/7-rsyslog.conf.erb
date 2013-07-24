@@ -36,8 +36,11 @@ $RuleSet remote
 
 $template FileFormat,"%msg:::sp-if-no-1st-sp%%msg%\n"
 $template noLogServerLog, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%programname%.log"
-if $syslogfacility-text == 'local3' then ?noLogServerLog;FileFormat
-& ~
+if $syslogfacility-text == 'local3' then {
+  ?noLogServerLog;FileFormat
+  stop
+}
+
 
 $template DynFile, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%syslogfacility-text%.log"
 $Template DynMessages, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/messages"
@@ -53,7 +56,7 @@ $RuleSet RSYSLOG_DefaultRuleset
 
 <% if scope.lookupvar('rsyslog::tcp_enable') == true %>
 # bind ruleset to tcp listener
-input(type="imtcp" port="<% scope.lookupvar('rsyslog::tcp_port') %>" Ruleset="remote")
+input(type="imudp" port="<% scope.lookupvar('rsyslog::tcp_port') %>" Ruleset="remote")
 <% end %>
 <% if scope.lookupvar('rsyslog::udp_enable') == true %>
 input(type="imtcp" port="<%= scope.lookupvar('rsyslog::udp_port') %>" Ruleset="remote")
@@ -119,3 +122,11 @@ local7.*                                                /var/log/boot.log
 # remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
 #*.* @@remote-host:514
 # ### end of the forwarding rule ###
+<% if scope.lookupvar('rsyslog::client') == true %>
+<% if scope.lookupvar('rsyslog::udp_enable') == true %>
+*.* @<%= scope.lookupvar('rsyslog::syslogserver') %>:<%= scope.lookupvar('rsyslog::udp_port') %>
+<% end %>
+<% if scope.lookupvar('tcp_enable') == true %>
+*.* @@<%= scope.lookupvar('rsyslog::syslogserver') %>:<%= scope.lookupvar('rsyslog::tcp_port') %>
+<% end %>
+<% end %>
