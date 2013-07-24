@@ -22,7 +22,7 @@
 #    statefile   => 'mcollective_state'
 #  }
 #
-define rsyslog::client::concatimfile(
+define rsyslog::client::imfile(
   $rsyslogmjrver     = "${rsyslog::rsyslogmjrver}",
   $logfilename       = undef,
   $filetag           = undef,
