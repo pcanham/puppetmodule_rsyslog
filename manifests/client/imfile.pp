@@ -1,4 +1,4 @@
-# Define: rsyslog::client::imfile
+# Define: rsyslog::client::concatimfile
 #
 # This module manages custom files being pushed through rsyslog via
 # imfile module.
@@ -22,7 +22,7 @@
 #    statefile   => 'mcollective_state'
 #  }
 #
-define rsyslog::client::imfile(
+define rsyslog::client::concatimfile(
   $rsyslogmjrver     = "${rsyslog::rsyslogmjrver}",
   $logfilename       = undef,
   $filetag           = undef,
@@ -34,23 +34,27 @@ define rsyslog::client::imfile(
   if $logfilename == undef { fail('logfilename not set.') }
   if $filetag == undef { fail('filetag not set.') }
   if $statefile == undef { fail('statefile not set.') }
-  
-  if defined(File["${rsyslog::extsyslog_dir}/imfile.conf"]) {
-      notice("File: ${rsyslog::extsyslog_dir}/imfile.conf already defined.")
-    } else {
-      file { "${rsyslog::extsyslog_dir}/imfile.conf":
-       content => template("rsyslog/${rsyslogmjrver}-imfile-master.conf.erb"),
-       backup  => false,
-       notify  => Class['rsyslog::service'],
-      }    
-    }
 
-  file { "${rsyslog::extsyslog_dir}/${filetag}":
-    ensure  => file,
-    path    => "${rsyslog::extsyslog_dir}/${filetag}.conf",
-    backup  => false,
-    content => template("rsyslog/${rsyslogmjrver}-imfile.conf.erb"),
-    require => Class['rsyslog::install'],
-    notify  => Class['rsyslog::service'],
+  $imfile="${rsyslog::extsyslog_dir}/imfile.conf"
+  if ! defined(Concat[$imfile]) {
+    concat { $imfile:
+      owner => root,
+      group => root,
+      mode  => 644
+    }
   }
+
+  if ! defined(Concat::Fragment['imfile_header']) {
+    concat::fragment{'imfile_header':
+      target => $imfile,
+      content => template("rsyslog/${rsyslog::rsyslogmjrver}-imfile-master.conf.erb"),
+      order   => 01,
+    }
+  }
+
+  concat::fragment { "rsyslog config ${title}":
+    target  => "${rsyslog::extsyslog_dir}/imfile.conf",
+    content => template("rsyslog/${rsyslog::rsyslogmjrver}-imfile.conf.erb"),
+  }
+
 }
