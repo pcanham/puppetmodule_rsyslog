@@ -15,6 +15,8 @@ module(load="imklog")   # provides kernel logging support (previously done by rk
 # Include all config files in <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/
 $IncludeConfig <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/*.conf
 
+$template RFC3164fmt,"<%PRI%>%TIMESTAMP% %HOSTNAME% %syslogtag%%msg%"
+
 
 <% if scope.lookupvar('rsyslog::server') == true %>
 ###############################################################################
