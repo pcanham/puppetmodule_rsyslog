@@ -13,18 +13,18 @@
 #
 class rsyslog::install {
   
-  exec { 'rsyslog-yum-clean-all': 
+  exec { 'rsyslog-yum-clean-expire-cache': 
     path     => '/bin:/usr/bin:/usr/sbin:/usr/local/bin',
     require  => [ Yumrepo['rsyslog-v5-stable'],
                   Yumrepo['rsyslog-v6-stable'],
                   Yumrepo['rsyslog-v7-stable']
                 ], 
-    command  => "yum clean all",
+    command  => "yum clean expire-cache",
     before   => Package["$rsyslog::packagename"],
   }~>
     package { $rsyslog::packagename:
       ensure  => latest,
-      require => [ Exec['rsyslog-yum-clean-all'],
+      require => [ Exec['rsyslog-yum-clean-expire-cache'],
                     Yumrepo['rsyslog-v5-stable'],
                     Yumrepo['rsyslog-v6-stable'],
                     Yumrepo['rsyslog-v7-stable']
@@ -36,6 +36,7 @@ class rsyslog::install {
     ensure  => directory,
     owner   => 'root',
     group   => 'root',
-    mode    => '0750'
+    mode    => '0750',
+    require => Package["$rsyslog::packagename"]
   }
 }
