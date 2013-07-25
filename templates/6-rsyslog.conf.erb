@@ -12,7 +12,7 @@ $ModLoad imklog   # kernel logging (formerly provided by rklogd)
 # Include all config files in <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/
 $IncludeConfig <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/*.conf
 
-$template RFC3164fmt,"<%PRI%>%TIMESTAMP% %HOSTNAME% %syslogtag%%msg%"
+$template RFC3164fmt,"<%%PRI%>%TIMESTAMP% %HOSTNAME% %syslogtag%%msg%"
 
 <% if scope.lookupvar('rsyslog::server') == true %>
 ###############################################################################
