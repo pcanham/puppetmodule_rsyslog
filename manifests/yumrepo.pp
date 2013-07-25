@@ -13,25 +13,12 @@
 #
 #
 class rsyslog::yumrepo {
-  yumrepo { 'rsyslog-v5-stable':
-    baseurl => "http://rpms.adiscon.com/v5-stable/epel-6/${::architecture}",
-    descr => "Adiscon Rsyslog v5-stable for CentOS-6-${::architecture}",
+  
+  yumrepo { "rsyslog-v${rsyslog::rsyslogmjrver}-stable":
+    baseurl => "http://rpms.adiscon.com/v${rsyslog::rsyslogmjrver}-stable/epel-${::lsbmajdistrelease}/${::architecture}",
+    descr => "Adiscon Rsyslog v${rsyslog::rsyslogmjrver}-stable for CentOS-${::lsbmajdistrelease}-${::architecture}",
     gpgkey => 'http://rpms.adiscon.com/RPM-GPG-KEY-Adiscon',
-    enabled => '0',
+    enabled => '1',
     gpgcheck => '0',
-  }->
-    yumrepo { 'rsyslog-v6-stable':
-      baseurl => "http://rpms.adiscon.com/v6-stable/epel-6/${::architecture}",
-      descr => "Adiscon Rsyslog v6-stable for CentOS-6-${::architecture}",
-      gpgkey => 'http://rpms.adiscon.com/RPM-GPG-KEY-Adiscon',
-      enabled => '0',
-      gpgcheck => '0',
-    }->
-      yumrepo { 'rsyslog-v7-stable':
-        baseurl => "http://rpms.adiscon.com/v7-stable/epel-6/${::architecture}",
-        descr => "Adiscon Rsyslog v7-stable for CentOS-6-${::architecture}",
-        gpgkey => 'http://rpms.adiscon.com/RPM-GPG-KEY-Adiscon',
-        enabled => '1',
-        gpgcheck => '0',
-      }
+  }
 }
