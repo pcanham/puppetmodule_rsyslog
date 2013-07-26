@@ -14,6 +14,12 @@
 #
 class rsyslog::yumrepo {
   
+  if defined(Package['redhat-lsb']) {
+    notice("Package: redhat-lsb already defined.")
+  } else {
+    package {'redhat-lsb':
+  }
+  
   yumrepo { "rsyslog-v${rsyslog::rsyslogmjrver}-stable":
     baseurl => "http://rpms.adiscon.com/v${rsyslog::rsyslogmjrver}-stable/epel-${::lsbmajdistrelease}/${::architecture}",
     descr => "Adiscon Rsyslog v${rsyslog::rsyslogmjrver}-stable for CentOS-${::lsbmajdistrelease}-${::architecture}",
