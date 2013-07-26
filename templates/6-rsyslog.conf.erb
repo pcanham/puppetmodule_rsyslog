@@ -29,19 +29,18 @@ $ModLoad imtcp
 # Switch to remote ruleset
 $RuleSet remote
 
-$template FileFormat,"%msg:::sp-if-no-1st-sp%%msg%\n"
 $template noLogServerLog, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%programname%.log"
-if $syslogfacility-text == 'local3' then ?noLogServerLog;FileFormat
+if $syslogfacility-text == 'local3' then ?noLogServerLog;RFC3164fmt
 & ~
 
 $template DynFile, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%syslogfacility-text%.log"
 $Template DynMessages, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/messages"
-*.info;mail.none;authpriv.none;cron.none            ?DynFile;FileFormat
-authpriv.*                                          ?DynFile;FileFormat
-mail.*                                              ?DynFile;FileFormat
-cron.*                                              ?DynFile;FileFormat
-user.*                                              ?DynFile;FileFormat
-uucp,news.crit                                      ?DynFile;FileFormat
+*.info;mail.none;authpriv.none;cron.none            ?DynFile;RFC3164fmt
+authpriv.*                                          ?DynFile;RFC3164fmt
+mail.*                                              ?DynFile;RFC3164fmt
+cron.*                                              ?DynFile;RFC3164fmt
+user.*                                              ?DynFile;RFC3164fmt
+uucp,news.crit                                      ?DynFile;RFC3164fmt
 
 # Switch back to default ruleset
 $RuleSet RSYSLOG_DefaultRuleset
@@ -59,7 +58,7 @@ $UDPServerRun <%= scope.lookupvar('rsyslog::udp_port') %>
 ### Finishing remote syslog config                                          ###
 ###############################################################################
 <% end %>
-$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+$ActionFileDefaultTemplate RSYSLOG_TraditionalRFC3164fmt
 
 # Log all kernel messages to the console.
 # Logging much else clutters up the screen.

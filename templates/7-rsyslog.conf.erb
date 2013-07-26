@@ -36,22 +36,21 @@ module(load="imtcp") # needs to be done just once
 # Switch to remote ruleset
 $RuleSet remote
 
-$template FileFormat,"%msg:::sp-if-no-1st-sp%%msg%\n"
 $template noLogServerLog, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%programname%.log"
 if $syslogfacility-text == 'local3' then {
-  ?noLogServerLog;FileFormat
+  ?noLogServerLog;RFC3164fmt
   stop
 }
 
 
 $template DynFile, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%syslogfacility-text%.log"
 $Template DynMessages, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/messages"
-*.info;mail.none;authpriv.none;cron.none            ?DynFile;FileFormat
-authpriv.*                                          ?DynFile;FileFormat
-mail.*                                              ?DynFile;FileFormat
-cron.*                                              ?DynFile;FileFormat
-user.*                                              ?DynFile;FileFormat
-uucp,news.crit                                      ?DynFile;FileFormat
+*.info;mail.none;authpriv.none;cron.none            ?DynFile;RFC3164fmt
+authpriv.*                                          ?DynFile;RFC3164fmt
+mail.*                                              ?DynFile;RFC3164fmt
+cron.*                                              ?DynFile;RFC3164fmt
+user.*                                              ?DynFile;RFC3164fmt
+uucp,news.crit                                      ?DynFile;RFC3164fmt
 
 # Switch back to default ruleset
 $RuleSet RSYSLOG_DefaultRuleset
@@ -71,7 +70,7 @@ input(type="imtcp" port="<%= scope.lookupvar('rsyslog::udp_port') %>" Ruleset="r
 #### GLOBAL DIRECTIVES ####
 
 # Use default timestamp format
-$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+$ActionFileDefaultTemplate RSYSLOG_TraditionalRFC3164fmt
 
 # File syncing capability is disabled by default. This feature is usually not required,
 # not useful and an extreme performance hit
