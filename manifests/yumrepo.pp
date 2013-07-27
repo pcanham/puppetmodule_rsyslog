@@ -18,7 +18,7 @@ class rsyslog::yumrepo {
     notice("Package: redhat-lsb already defined.")
   } else {
     package {'redhat-lsb':
-      before => Package['redhat-lsb'] 
+      before => Yumrepo["rsyslog-v${rsyslog::rsyslogmjrver}-stable"]
     }
   }
   
