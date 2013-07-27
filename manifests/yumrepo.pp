@@ -26,5 +26,6 @@ class rsyslog::yumrepo {
     gpgkey => 'http://rpms.adiscon.com/RPM-GPG-KEY-Adiscon',
     enabled => '1',
     gpgcheck => '0',
+    require => Package['redhat-lsb']
   }
 }
