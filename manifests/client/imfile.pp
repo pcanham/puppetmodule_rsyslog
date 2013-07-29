@@ -27,7 +27,7 @@ define rsyslog::client::imfile(
   $logfilename       = undef,
   $filetag           = undef,
   $statefile         = undef,
-  $severity          = 'debug',
+  $severity          = 'notice',
   $factility         = 'local3',
 ) {
 
