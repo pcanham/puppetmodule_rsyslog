@@ -43,7 +43,6 @@ if $syslogfacility-text == 'local0' then {
   stop
 }
 
-
 $template DynFile, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%syslogfacility-text%.log"
 $Template DynMessages, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/messages"
 *.info;mail.none;authpriv.none;cron.none            ?DynFile;RFC3164fmt
@@ -71,7 +70,7 @@ input(type="imtcp" port="<%= scope.lookupvar('rsyslog::udp_port') %>" Ruleset="r
 #### GLOBAL DIRECTIVES ####
 
 # Use default timestamp format
-$ActionFileDefaultTemplate RSYSLOG_Traditional
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
 
 # File syncing capability is disabled by default. This feature is usually not required,
 # not useful and an extreme performance hit
