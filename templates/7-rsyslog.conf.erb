@@ -12,6 +12,8 @@
 module(load="imuxsock") # provides support for local system logging (e.g. via logger command)
 module(load="imklog")   # provides kernel logging support (previously done by rklogd)
 
+$ConsoleLogLevel 3
+
 # Include all config files in <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/
 $IncludeConfig <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/*.conf
 
@@ -96,8 +98,8 @@ mail.*                                                  /var/log/maillog
 # Log cron stuff
 cron.*                                                  /var/log/cron
 
-# Everybody gets emergency messages
-*.emerg                                                 :omusrmsg:*
+# Everybody gets emergency kernel messages
+kern.emerg                                                 :omusrmsg:*
 
 # Save news errors of level crit and higher in a special file.
 uucp,news.crit                                          /var/log/spooler
