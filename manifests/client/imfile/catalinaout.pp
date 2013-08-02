@@ -1,4 +1,4 @@
-# Define: rsyslog::client::imfile::catalina-out
+# Define: rsyslog::client::imfile::catalinaout
 #
 # This module manages custom files being pushed through rsyslog via
 # imfile module.
@@ -17,7 +17,7 @@
 #    logfilename => '/app/tomcat/log/catalina.out',
 #  }
 #
-define rsyslog::client::imfile::catalina-out(
+define rsyslog::client::imfile::catalinaout(
   $logfilename = undef,
   ) {
 
