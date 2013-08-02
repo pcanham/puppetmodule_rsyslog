@@ -1,4 +1,4 @@
-# Define: rsyslog::client::imfile::catalina-out
+## Define: rsyslog::client::imfile::jbossserverlog
 #
 # This module manages custom files being pushed through rsyslog via
 # imfile module.
@@ -13,11 +13,11 @@
 #
 # Sample Usage:
 #
-#  rsyslog::client::imfile::catalina-out { "catalina-out-${::hostname}":
-#    logfilename => '/app/tomcat/log/catalina.out',
+#  rsyslog::client::imfile::jbossserverlog { "jboss-server-log-${::hostname}":
+#    logfilename => '/app/jboss-5.1.0-GA/server/default/log/server.log',
 #  }
 #
-define rsyslog::client::imfile::catalina-out(
+define rsyslog::client::imfile::jbossserverlog(
   $logfilename = undef,
   ) {
 
@@ -25,8 +25,8 @@ define rsyslog::client::imfile::catalina-out(
 
   rsyslog::client::imfile { $name:
     logfilename => $logfilename,
-    filetag     => 'catalina_out',
-    statefile   => 'catalina_out_state',
+    filetag     => 'jboss_server_log',
+    statefile   => 'jboss_server_log_state',
     severity    => 'notice',
     factility   => 'local3',
   }
