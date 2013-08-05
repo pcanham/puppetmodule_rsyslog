@@ -19,6 +19,7 @@ $IncludeConfig <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/*.conf
 
 $template RFC3164fmt,"<%%PRI%>%TIMESTAMP% %HOSTNAME% %syslogtag%%msg%\n"
 $template JustRAWMSGfmt,"%msg:2:2048%\n"
+$template HostRAWMSGfmt,"%HOSTNAME% %msg:2:2048%\n"
 
 
 <% if scope.lookupvar('rsyslog::server') == true %>
@@ -41,7 +42,7 @@ $RuleSet remote
 
 $template noLogServerLog, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%programname%.log"
 if $syslogfacility-text == 'local0' then {
-  ?noLogServerLog;JustRAWMSGfmt
+  ?noLogServerLog;HostRAWMSGfmt
   stop
 }
 
