@@ -13,13 +13,14 @@ module(load="imuxsock") # provides support for local system logging (e.g. via lo
 module(load="imklog")   # provides kernel logging support (previously done by rklogd)
 
 $ConsoleLogLevel 3
+$EscapeControlCharactersOnReceive off
 
 # Include all config files in <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/
 $IncludeConfig <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/*.conf
 
 $template RFC3164fmt,"<%%PRI%>%TIMESTAMP% %HOSTNAME% %syslogtag%%msg%\n"
-$template JustRAWMSGfmt,"%msg:2:2048%\n"
-$template HostRAWMSGfmt,"%HOSTNAME% %msg:2:2048%\n"
+$template JustRAWMSGfmt,"%msg:2:2048:space-cc%\n"
+$template HostRAWMSGfmt,"%HOSTNAME% %msg:2:2048:space-cc%\n"
 
 
 <% if scope.lookupvar('rsyslog::server') == true %>
