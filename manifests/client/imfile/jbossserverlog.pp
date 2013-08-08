@@ -25,7 +25,7 @@ define rsyslog::client::imfile::jbossserverlog(
 
   rsyslog::client::imfile { $name:
     logfilename => $logfilename,
-    filetag     => 'jboss_server_log',
+    filetag     => 'jboss_server',
     statefile   => 'jboss_server_log_state',
     severity    => 'notice',
     factility   => 'local3',
