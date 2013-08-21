@@ -21,11 +21,11 @@ class rsyslog::yumrepo {
       before => Yumrepo["rsyslog-v${rsyslog::rsyslogmjrver}-stable"]
     }
   }
-  
+ 
   yumrepo { "rsyslog-v${rsyslog::rsyslogmjrver}-stable":
-    baseurl => "http://rpms.adiscon.com/v${rsyslog::rsyslogmjrver}-stable/epel-${::lsbmajdistrelease}/${::architecture}",
-    descr => "Adiscon Rsyslog v${rsyslog::rsyslogmjrver}-stable for CentOS-${::lsbmajdistrelease}-${::architecture}",
-    gpgkey => 'http://rpms.adiscon.com/RPM-GPG-KEY-Adiscon',
+    baseurl => $rsyslog::yum_baseurl,
+    descr => $rsyslog::yum_descr,
+    gpgkey => $rsyslog::yum_gpgkey,
     enabled => '1',
     gpgcheck => '0',
     require => Package['redhat-lsb']

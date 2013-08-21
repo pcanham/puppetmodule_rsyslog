@@ -30,11 +30,13 @@ class rsyslog::client::setup(
   $udp_port      = $rsyslog::udp_port
 ) {
 
-  if defined(Class['rsyslog::yumrepo']) {
-    notice("Class: rsyslog::yumrepo already defined.")
-  } else {
-    class {'rsyslog::yumrepo':
-              before => Class['rsyslog::install'],
+  if $yum_enable == true {
+    if defined(Class['rsyslog::yumrepo']) {
+      notice("Class: rsyslog::yumrepo already defined.")
+    } else {
+      class {'rsyslog::yumrepo':
+                before => Class['rsyslog::install'], 
+      }
     }
   }
 

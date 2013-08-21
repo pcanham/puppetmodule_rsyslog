@@ -47,7 +47,11 @@ class rsyslog(
   $tcp_enable    = $rsyslog::params::tcp_enabled,
   $udp_enable    = $rsyslog::params::udp_enabled,
   $tcp_port      = $rsyslog::params::tcp_port,
-  $udp_port      = $rsyslog::params::udp_port
+  $udp_port      = $rsyslog::params::udp_port,
+  $yum_enable    = $rsyslog::params::yum_enable,
+  $yum_baseurl   = $rsyslog::params::yum_baseurl,
+  $yum_descr     = $rsyslog::params::yum_descr,
+  $yum_gpgkey    = $rsyslog::params::yum_gpgkey,
 ) inherits rsyslog::params {
   if $enabled == false {
     notify {'client or server parameter needs to be declared.':}

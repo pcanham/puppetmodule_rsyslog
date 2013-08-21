@@ -30,11 +30,13 @@ class rsyslog::server::setup(
   $logpath        = $rsyslog::logpath
 ) {
 
-  if defined(Class['rsyslog::yumrepo']) {
-    notice("Class: rsyslog::yumrepo already defined.")
-  } else {
-    class {'rsyslog::yumrepo':
-              before => Class['rsyslog::install'], 
+  if $yum_enable == true {
+    if defined(Class['rsyslog::yumrepo']) {
+      notice("Class: rsyslog::yumrepo already defined.")
+    } else {
+      class {'rsyslog::yumrepo':
+                before => Class['rsyslog::install'], 
+      }
     }
   }
 

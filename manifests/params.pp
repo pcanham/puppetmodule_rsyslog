@@ -23,7 +23,11 @@ class rsyslog::params {
   $tcp_enabled   = false
   $udp_enabled   = false
   $logpath       = '/var/log/syslog'
-  $rsyslogmjrver = '6'
+  $rsyslogmjrver = '7'
+  $yum_enable    = true
+  $yum_baseurl   = "http://rpms.adiscon.com/v${rsyslogmjrver}-stable/epel-${::lsbmajdistrelease}/${::architecture}"
+  $yum_descr     = "Adiscon Rsyslog v${rsyslogmjrver}-stable for CentOS-${::lsbmajdistrelease}-${::architecture}"
+  $yum_gpgkey    = 'http://rpms.adiscon.com/RPM-GPG-KEY-Adiscon'
 
   case $::osfamily {
     RedHat: {
