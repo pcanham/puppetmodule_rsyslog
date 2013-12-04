@@ -36,6 +36,7 @@ class rsyslog::server::setup(
     } else {
       class {'rsyslog::yumrepo':
                 before => Class['rsyslog::install'], 
+                stage  => 'setup',
       }
     }
   }
