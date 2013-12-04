@@ -3,6 +3,7 @@
 
 $script = <<SCRIPT
 ln -s /tmp/vagrant-puppet/modules-0/puppetmodule_rsyslog /etc/puppet/modules/rsyslog
+puppet module install puppetlabs-stdlib --version 4.1.0
 /etc/init.d/iptables stop
 SCRIPT
 
