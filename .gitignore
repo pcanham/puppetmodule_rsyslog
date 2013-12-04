@@ -35,3 +35,5 @@ Icon
 
 ## hold rspec test info which isnt needed
 .rspec_system
+.bundle
+vendor/*
