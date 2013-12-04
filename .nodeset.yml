@@ -1,0 +1,10 @@
+---
+default_set: 'centos-64-x64'
+sets:
+  nodes:
+  'centos-64-x64':
+    "main.vm":
+      prefab: 'centos-64-x64'
+  'centos-59-x64':
+    "main.vm":
+      prefab: 'centos-59-x64'

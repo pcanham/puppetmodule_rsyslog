@@ -1,0 +1,11 @@
+---
+'centos-64-x64':
+  provider_specifics:
+    vagrant_virtualbox:
+      box: 'centos-64-x64-vbox4210'
+      box_url: 'http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210.box'
+'centos-59-x64':
+  provider_specifics:
+    vagrant_virtualbox:
+      box: 'centos-59-x64-vbox4210'
+      box_url: 'http://puppet-vagrant-boxes.puppetlabs.com/centos-59-x64-vbox4210.box'
