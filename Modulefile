@@ -1,6 +1,7 @@
 name    'puppetmodule-rsyslog'
 version '0.0.8'
 dependency 'ripienaar/concat', '0.2.0'
+dependency 'puppetlabs/stdlib', '4.1.0'
 source  'http://git-infra.internal/puppet/puppetmodule_rsyslog.git'
 author  'pcanham'
 license ''
