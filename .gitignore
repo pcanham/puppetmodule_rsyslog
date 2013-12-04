@@ -32,3 +32,6 @@ Icon
 # Sublime Text Project
 *.sublime-project
 *.sublime-workspace
+
+## hold rspec test info which isnt needed
+.rspec_system
