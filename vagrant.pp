@@ -1,4 +1,5 @@
 node default {
+  class { 'stdlib': }
   class { 'rsyslog':
     enabled      => true,
     syslogserver => 'syslog.sandbox.internal',
