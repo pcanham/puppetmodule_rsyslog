@@ -1,0 +1,136 @@
+# rsyslog configuration file
+# note that most of this config file uses old-style format,
+# because it is well-known AND quite suitable for simple cases
+# like we have with the default config. For more advanced
+# things, RainerScript configuration is suggested.
+
+# For more information see /usr/share/doc/rsyslog-*/rsyslog_conf.html
+# If you experience problems, see http://www.rsyslog.com/doc/troubleshoot.html
+
+#### MODULES ####
+
+module(load="imuxsock") # provides support for local system logging (e.g. via logger command)
+module(load="imklog")   # provides kernel logging support (previously done by rklogd)
+
+$ConsoleLogLevel 3
+
+# Include all config files in <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/
+$IncludeConfig <%= scope.lookupvar('rsyslog::extsyslog_dir') %>/*.conf
+
+$template RFC3164fmt,"<%%PRI%>%TIMESTAMP% %HOSTNAME% %syslogtag%%msg%\n"
+$template JustRAWMSGfmt,"%msg:2:2048%\n"
+$template HostRAWMSGfmt,"%HOSTNAME% %msg:2:2048%\n"
+
+
+<% if scope.lookupvar('rsyslog::server') == true %>
+###############################################################################
+### Starting remote syslog config                                           ###
+###############################################################################
+<% if scope.lookupvar('rsyslog::udp_enable') == true %>
+# Provides UDP syslog reception
+# for parameters see http://www.rsyslog.com/doc/imudp.html
+module(load="imudp") # needs to be done just once
+<% end %>
+<% if scope.lookupvar('rsyslog::tcp_enable') == true %>
+# Provides TCP syslog reception
+# for parameters see http://www.rsyslog.com/doc/imtcp.html
+module(load="imtcp") # needs to be done just once
+<% end %>
+
+# Switch to remote ruleset
+$RuleSet remote
+
+$template noLogServerLog, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%programname%.log"
+if $syslogfacility-text == 'local0' then {
+  ?noLogServerLog;HostRAWMSGfmt
+  stop
+}
+
+$template DynFile, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/%syslogfacility-text%.log"
+$Template DynMessages, "<%= scope.lookupvar('rsyslog::logpath') %>/%HOSTNAME%/messages"
+*.info;mail.none;authpriv.none;cron.none            ?DynFile;RFC3164fmt
+authpriv.*                                          ?DynFile;RFC3164fmt
+mail.*                                              ?DynFile;RFC3164fmt
+cron.*                                              ?DynFile;RFC3164fmt
+user.*                                              ?DynFile;RFC3164fmt
+uucp,news.crit                                      ?DynFile;RFC3164fmt
+
+# Switch back to default ruleset
+$RuleSet RSYSLOG_DefaultRuleset
+
+<% if scope.lookupvar('rsyslog::tcp_enable') == true %>
+# bind ruleset to tcp listener
+input(type="imudp" port="<% scope.lookupvar('rsyslog::tcp_port') %>" Ruleset="remote")
+<% end %>
+<% if scope.lookupvar('rsyslog::udp_enable') == true %>
+input(type="imtcp" port="<%= scope.lookupvar('rsyslog::udp_port') %>" Ruleset="remote")
+<% end %>
+###############################################################################
+### Finishing remote syslog config                                          ###
+###############################################################################
+<% end %>
+
+#### GLOBAL DIRECTIVES ####
+
+# Use default timestamp format
+$ActionFileDefaultTemplate RSYSLOG_TraditionalFileFormat
+
+# File syncing capability is disabled by default. This feature is usually not required,
+# not useful and an extreme performance hit
+#$ActionFileEnableSync on
+
+#### RULES ####
+
+# Log all kernel messages to the console.
+# Logging much else clutters up the screen.
+#kern.*                                                 /dev/console
+
+# Log anything (except mail) of level info or higher.
+# Don't log private authentication messages!
+*.info;mail.none;authpriv.none;cron.none                /var/log/messages
+
+# The authpriv file has restricted access.
+authpriv.*                                              /var/log/secure
+
+# Log all the mail messages in one place.
+mail.*                                                  /var/log/maillog
+
+
+# Log cron stuff
+cron.*                                                  /var/log/cron
+
+# Everybody gets emergency kernel messages
+kern.emerg                                                 :omusrmsg:*
+
+# Save news errors of level crit and higher in a special file.
+uucp,news.crit                                          /var/log/spooler
+
+# Save boot messages also to boot.log
+local7.*                                                /var/log/boot.log
+
+
+# ### begin forwarding rule ###
+# The statement between the begin ... end define a SINGLE forwarding
+# rule. They belong together, do NOT split them. If you create multiple
+# forwarding rules, duplicate the whole block!
+# Remote Logging (we use TCP for reliable delivery)
+#
+# An on-disk queue is created for this action. If the remote host is
+# down, messages are spooled to disk and sent when it is up again.
+#$WorkDirectory /var/lib/rsyslog # where to place spool files
+#$ActionQueueFileName fwdRule1 # unique name prefix for spool files
+#$ActionQueueMaxDiskSpace 1g   # 1gb space limit (use as much as possible)
+#$ActionQueueSaveOnShutdown on # save messages to disk on shutdown
+#$ActionQueueType LinkedList   # run asynchronously
+#$ActionResumeRetryCount -1    # infinite retries if host is down
+# remote host is: name/ip:port, e.g. 192.168.0.1:514, port optional
+#*.* @@remote-host:514
+# ### end of the forwarding rule ###
+<% if scope.lookupvar('rsyslog::client') == true %>
+<% if scope.lookupvar('rsyslog::udp_enable') == true %>
+*.* @<%= scope.lookupvar('rsyslog::syslogserver') %>:<%= scope.lookupvar('rsyslog::udp_port') %>
+<% end %>
+<% if scope.lookupvar('tcp_enable') == true %>
+*.* @@<%= scope.lookupvar('rsyslog::syslogserver') %>:<%= scope.lookupvar('rsyslog::tcp_port') %>
+<% end %>
+<% end %>
