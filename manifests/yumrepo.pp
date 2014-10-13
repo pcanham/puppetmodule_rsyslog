@@ -17,9 +17,7 @@ class rsyslog::yumrepo {
   if defined(Package['redhat-lsb']) {
     notice("Package: redhat-lsb already defined.")
   } else {
-    package {'redhat-lsb':
-      before => Yumrepo["rsyslog-v${rsyslog::rsyslogmjrver}-stable"]
-    }
+    package {'redhat-lsb': }
   }
   
   yumrepo { "rsyslog-v${rsyslog::rsyslogmjrver}-stable":
@@ -28,6 +26,5 @@ class rsyslog::yumrepo {
     gpgkey => 'http://rpms.adiscon.com/RPM-GPG-KEY-Adiscon',
     enabled => '1',
     gpgcheck => '0',
-    require => Package['redhat-lsb']
   }
 }

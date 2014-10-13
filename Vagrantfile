@@ -2,7 +2,8 @@
 # vi: set ft=ruby :
 
 $script = <<SCRIPT
-ln -s /tmp/vagrant-puppet/modules-0/puppetmodule_rsyslog /etc/puppet/modules/rsyslog
+puppet --force module install puppetlabs-concat --version 1.1.1
+puppet --force module install puppetlabs-stdlib --version 4.3.2
 /etc/init.d/iptables stop
 SCRIPT
 
@@ -18,11 +19,12 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define :webnode do |webnode|
-    webnode.vm.box = "centos-64-x64"
-    webnode.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-64-x64-vbox4210.box"
+    webnode.vm.box = "puppet-centos-65-x64"
+    webnode.vm.box_url = "http://puppet-vagrant-boxes.puppetlabs.com/centos-65-x64-virtualbox-puppet.box"
     webnode.vm.network :private_network, ip: "10.0.0.20"
     webnode.vm.network :forwarded_port, guest: 8080, host: 8080 # tomcat
     webnode.vm.hostname = "webnode"
+    webnode.vm.synced_folder "./", "/etc/puppet/modules/rsyslog", create: true
     webnode.vm.provider :virtualbox do |v|
       v.customize ["modifyvm", :id, "--memory", "1024" ]
     end
@@ -31,7 +33,7 @@ Vagrant.configure("2") do |config|
     webnode.vm.provision :puppet,
       :options => ["--verbose", "--debug", "--summarize"],
       :facter => {
-        "fqdn"   => "rsyslog",
+        "fqdn"   => "webnode.sandbox.internal",
       } do |puppet|
         puppet.manifests_path = "./"
         puppet.manifest_file = "vagrant.pp"

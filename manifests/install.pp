@@ -13,18 +13,9 @@
 #
 class rsyslog::install {
   
-  exec { 'rsyslog-yum-clean-expire-cache': 
-    path     => '/bin:/usr/bin:/usr/sbin:/usr/local/bin',
-    require  => Yumrepo["rsyslog-v${rsyslog::rsyslogmjrver}-stable"],
-    command  => "yum clean expire-cache",
-    before   => Package["$rsyslog::packagename"],
-  }
-
   package { $rsyslog::packagename:
     ensure  => latest,
-    require => [ Exec['rsyslog-yum-clean-expire-cache'],
-                  Yumrepo["rsyslog-v${rsyslog::rsyslogmjrver}-stable"]
-               ],
+    require => Yumrepo["rsyslog-v${rsyslog::rsyslogmjrver}-stable"],
     notify  => Class[rsyslog::service],
   }
 
